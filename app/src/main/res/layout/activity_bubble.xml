@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wechseltech.chartlibrary.BubblePlot
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/Chart"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     app:isHorizontal="true"
+     app:axisLabelSize ="12sp"
+     app:labelSeparation="1dp"
+     app:showGrid="true"
+     app:textSize="12sp"
+     app:textColor="#000000"
+     app:assignSeriesColors="true"
+    
+     app:gridColor="#000000"
+     app:XisNum="true"
+     app:YisCategory="true"
+     app:drawLabels="true"
+    
+    />
+
+    
+

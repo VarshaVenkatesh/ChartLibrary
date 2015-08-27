@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wechseltech.chartlibrary.GaugeChart
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/Chart"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+    
+     app:labelSeparation="18dp"
+    
+     app:textSize="12sp"
+     app:textColor="#000000"
+     app:gaugeColor="#000000"
+     app:highlightColor="#FF0000"
+     app:boundingboxColor="#FFFF00"
+     app:arrowColor="#FF0000"
+    
+    />

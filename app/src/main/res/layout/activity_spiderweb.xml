@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.wechseltech.chartlibrary.SpiderWeb
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/Chart"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     app:gridColor="#000000"
+     app:labelSeparation="8dp"
+     app:accentprimaryColor="#FF0000"
+     app:textSize="14sp"
+     app:axisTextSize="12sp"
+     app:textColor="#000000"
+     app:assignSeriesColors="true"
+     app:useSeriesPrimary="false"
+     
+    
+    />

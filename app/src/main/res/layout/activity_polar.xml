@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wechseltech.chartlibrary.PolarChart
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/Chart"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+   
+     app:labelSeparation="8dp"
+     app:useSeriesPrimary="false"
+     app:accentprimaryColor="#FF0000"
+     app:textSize="14sp"
+     app:textColor="#000000"
+     
+    
+    />

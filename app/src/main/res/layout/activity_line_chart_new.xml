@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wechseltech.chartlibrary.LineChart
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/Chart"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     app:isHorizontal="true"
+     app:axisLabelSize ="12sp"
+     app:labelSeparation="8dp"
+     app:showGrid="true"
+     app:textSize="12sp"
+     app:textColor="#000000"
+     app:boundingboxColor="#000000"
+     app:assignSeriesColors="false"
+     app:accentprimaryColor="#FF0000"
+     app:useSeriesPrimary="false"
+     app:gridColor="#000000"
+     app:YisNum="true"
+     app:XisCategory="true"
+     app:drawLabels="true"
+    
+    />
