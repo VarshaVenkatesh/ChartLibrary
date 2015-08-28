@@ -586,13 +586,15 @@ public class StackedBarChart extends GraphView {
 		
 		
 		
-		if(!invalidate)
+		/*if(!invalidate)
 			drawLegend(canvas, labelPaint, lPaint,
 					numseries,seriesname,seriescolor,mLabelWidth,ticks,mAxisLabelHeight,aPaint);
 			
 			else
-			drawInvalidateLegend(canvas);
-		
+			drawInvalidateLegend(canvas);*/
+
+         drawLegend(canvas, labelPaint, lPaint,
+                 numseries,seriesname,seriescolor,mLabelWidth,ticks,mAxisLabelHeight,aPaint);
 		
 		
 		
@@ -612,81 +614,78 @@ public class StackedBarChart extends GraphView {
 	 
 	 
 	 private void drawInvalidateLegend(Canvas canvas) {
-			System.out.println("LEGEND" + legendBox);
-			 
-			
-			int row=1;
-			int a=0;
-			
-			
+
+			 int row=1;
+			 int a=0;
+			 float lastleft=0;
+			 int [] labelwidths = new int[numseries];
+
+
+			 for (int i=0; i<labelwidths.length; i++)
+
+			 {
+				 labelwidths[i]= (int) Math.abs(labelPaint.measureText(seriesname[i]+"0"));
+
+			 }
 			
 			
 			for (int i=0; i<seriesname.length; i++)
 				
 			{
-				int lLabelWidth = 0;
-				
-				if(i!=0)
-				lLabelWidth = (int) Math.abs(labelPaint.measureText(seriesname[i-1]+"0"));
-				
-				float checkleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-				float checkright = checkleft+drawBoxSize;
-				
-				
-			
-				//lPaint.setColor(seriescolor.get(i+1));
-				
+
+				float left=0,right=0;
 
 				
 				lPaint.setColor(seriescolor.get(seriesname[i]));
 				labelPaint.setColor(seriescolor.get(seriesname[i]));
-			
-			
+
+
+				if(i==0) {
+					left = legendBox.left + drawSpace;
+					lastleft = left;
+				}
+				else {
+
+					if(lastleft!=0)
+						left = lastleft + labelwidths[i-1]+drawSpace+drawBoxSize;
+					else
+						left=legendBox.left+drawSpace;
+					lastleft=left;
+
+				}
+
+				right = left+drawBoxSize;
 		
-				if(((checkright + lLabelWidth)<legendBox.right))
+				if(((right + labelwidths[i])<legendBox.right))
 				{
-					
-					System.out.println(seriesname[i]+"<RIGHT");
-					
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, labelPaint);
-					
-					a++;
+
 					
 				}
 				else
 				{
 					row =row+1;
-					System.out.println(seriesname[i]+">RIGHT");
-		     		
-					a=0;	
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-						
-					System.out.println("A" + a + "ROW"+row);
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, labelPaint);
-					
-					
-					a++;
+                    lastleft=0;
+                    left = legendBox.left +drawSpace;
+                    lastleft=left;
+                    right = left+drawBoxSize;
+                }
+
+
+                float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
+                float bottom = top+drawBoxSize;
+
+                canvas.drawRect(left, top, right,
+                        bottom, lPaint);
+                System.out.println(seriesname[i]);
+                canvas.drawText(seriesname[i],right+drawSpace,
+                        bottom, labelPaint);
+
 				}
-				
-		
-			}
+
+
+
+
+
 			
 			
 		}

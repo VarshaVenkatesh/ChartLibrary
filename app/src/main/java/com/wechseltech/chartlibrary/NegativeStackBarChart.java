@@ -187,7 +187,7 @@ public class NegativeStackBarChart extends BarView {
 			assignSeriesColors = a.getBoolean(R.styleable.Charts_assignSeriesColors, true);
 			useSeriesPrimary = a.getBoolean(R.styleable.Charts_usePrimary, true);
 			accentprimarycolor = a.getColor(R.styleable.Charts_accentprimaryColor, Color.RED);
-			legendSize = a.getDimension(R.styleable.Charts_legendBoxSize,30);
+			legendSize = a.getDimension(R.styleable.Charts_legendBoxSize, 30);
 			mAxisLabelSize = a.getDimension(R.styleable.Charts_axisLabelSize, 12);
 			mLabelSeparation = a.getDimension(R.styleable.Charts_labelSeparation, 8);
 			drawLabels = a.getBoolean(R.styleable.Charts_drawLabels, false);
@@ -853,10 +853,12 @@ public class NegativeStackBarChart extends BarView {
 		
 		if(showLegend)
 		{
-			if(!invalidate)
+		/*	if(!invalidate)
 			drawLegend(canvas);
 			else
-			drawInvalidateLegend(canvas);
+			drawInvalidateLegend(canvas);*/
+
+			drawLegend(canvas);
 		
 		}
 		
@@ -877,28 +879,44 @@ public class NegativeStackBarChart extends BarView {
 
 	
 	public void drawLegend(Canvas canvas) {
-		
-		
-		//int lLabelWidth = (int) Math.abs(ltPaint.measureText("00000000"));
-		int row=1;
-		
-		int a=0;
+
+
+
+        int row=1;
+        int a=0;
+        float lastleft=0;
+
+        int [] labelwidths = new int[2];
+
+
+        for (int i=0; i<labelwidths.length; i++)
+
+        {
+            labelwidths[i]= (int) Math.abs(ltPaint.measureText(seriesname[i]+"0"));
+
+        }
 		
 		for (int i=0; i<2; i++)
 			
 		{
-			
-			int lLabelWidth = 0;
-			
-			if(i!=0)
-			lLabelWidth = (int) Math.abs(ltPaint.measureText(seriesname[i-1]+"0"));
-			
-			float left = legendBox.left+ ((i+1)*drawSpace)+ (i*lLabelWidth) +(i*drawBoxSize);
-			float right = left+drawBoxSize;
-			
-			
-		
-			//lPaint.setColor(seriescolor.get(i+1));
+
+            float left=0; float right=0;
+
+            if(i==0) {
+                left = legendBox.left + drawSpace;
+                lastleft = left;
+            }
+            else {
+
+                if(lastleft!=0)
+                    left = lastleft + labelwidths[i-1]+drawSpace+drawBoxSize;
+                else
+                    left=legendBox.left+drawSpace;
+                lastleft=left;
+
+            }
+
+            right = left+drawBoxSize;
 			
 
 			if(assignSeriesColors)
@@ -916,7 +934,7 @@ public class NegativeStackBarChart extends BarView {
 			}
 		
 	
-			if(((right + lLabelWidth)<legendBox.right))
+			if(((right + labelwidths[i])<legendBox.right))
 			{
 				
 				
@@ -928,35 +946,30 @@ public class NegativeStackBarChart extends BarView {
 			else
 			{
 				row =row+1;
-				float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-				float bottom = top+drawBoxSize;
-				
-				
-				float rleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-				float rright = rleft+(drawBoxSize);
-				
-				System.out.println("A" + a);
-				
-				if(bottom>legendBox.bottom)
-				{
-					redrawLegendBox(legendBox.width(),drawBoxSize,mLabelWidth);
-				}
-				else
-				{
-					
-					canvas.drawRect(rleft,top,rright,
-							bottom, lPaint);
-				
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],rright+drawSpace,
-							bottom, ltPaint);
-					
-				}
-				
-				a++;
+                lastleft=0;
+                left = legendBox.left +drawSpace;
+                lastleft=left;
+                right = left+drawBoxSize;
 			}
-			
-		}
+
+
+
+            float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
+            float bottom = top+drawBoxSize;
+
+            if(bottom>legendBox.bottom)
+            {
+                redrawLegendBox(legendBox.width(),drawBoxSize,mLabelWidth);
+            }
+
+            canvas.drawRect(left,top,right,
+                    bottom, lPaint);
+
+            System.out.println(seriesname[i]);
+            canvas.drawText(seriesname[i],right+drawSpace,
+                    bottom, ltPaint);
+
+        }
 		
 		
 		
@@ -999,90 +1012,7 @@ public class NegativeStackBarChart extends BarView {
 	}
 	
 		
-		private void drawInvalidateLegend(Canvas canvas) {
-			System.out.println("LEGEND" + legendBox);
-			 
-			//int lLabelWidth = (int) Math.abs(ltPaint.measureText("00000000"));
-			int row=1;
-			int a=0;
-			
-			
-			for (int i=0; i<seriesname.length; i++)
-				
-			{
-				int lLabelWidth = 0;
-				
-				if(i!=0)
-				lLabelWidth = (int) Math.abs(ltPaint.measureText(seriesname[i-1]+"0"));
-				
-				float checkleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-				float checkright = checkleft+drawBoxSize;
-				
-				
-			
-				//lPaint.setColor(seriescolor.get(i+1));
-				
 
-				
-				if(assignSeriesColors)
-				{
-					lPaint.setColor(seriescolor.get(seriesname[i]));
-					ltPaint.setColor(seriescolor.get(seriesname[i]));
-					
-				}
-			
-				else
-				{
-					lPaint.setColor(seriescolor.get(seriesname[i]));
-					ltPaint.setColor(seriescolor.get(seriesname[i]));
-					
-				}
-			
-			
-		
-				if(((checkright + lLabelWidth)<legendBox.right))
-				{
-					
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, ltPaint);
-					
-				
-					a++;
-					
-				}
-				else
-				{
-					row =row+1;
-					a=0;	
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-						
-					System.out.println("A" + a + "ROW"+row);
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, ltPaint);
-					
-					
-					a++;	
-				}
-	
-			}
-			
-			
-		}
 	
 	private float getCentreHCategory(double value,float space)
 	{

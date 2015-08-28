@@ -530,10 +530,12 @@ public class SpiderWeb extends ChartView{
 	    
 	    drawText(canvas);
 		
-	    if(!invalidate)
+	   /* if(!invalidate)
 			drawLegend(canvas);
 			else
-			drawInvalidateLegend(canvas);
+			drawInvalidateLegend(canvas);*/
+
+         drawLegend(canvas);
 		
 	   // drawLegend(canvas,seriesname,seriescolor,mLabelWidth);
 	    
@@ -1242,97 +1244,86 @@ public class SpiderWeb extends ChartView{
 		
 		public void drawLegend(Canvas canvas) {
 			
-			
-			 
-		 	System.out.println("LEGEND" + legendBox);
-		 
-			//int lLabelWidth = (int) Math.abs(ltPaint.measureText("00000000"));
+
+			int [] labelwidths = new int[seriesname.length];
 			int row=1;
 			int a=0;
-			
-			
+			float lastleft=0,top=0,bottom=0;
+
+
+			for (int i=0; i<labelwidths.length; i++)
+
+			{
+				labelwidths[i]= (int) Math.abs(ltPaint.measureText(seriesname[i]+"0"));
+
+			}
+
+
+
 			for (int i=0; i<seriesname.length; i++)
 				
 			{
-				
-				int lLabelWidth = 0;
-				
-				if(i!=0)
-				lLabelWidth = (int) Math.abs(ltPaint.measureText(seriesname[i-1]+"0"));
-				float left = legendBox.left+ ((i+1)*drawSpace)+ (i*lLabelWidth) +(i*drawBoxSize);
-				float right = left+drawBoxSize;
-				
-				
-			
-				//lPaint.setColor(seriescolor.get(i+1));
-				
 
-				
-					lPaint.setColor(seriescolor.get(seriesname[i]));
+                float left=0; float right=0;
+
+
+
+
+                if(i==0) {
+                    left = legendBox.left + drawSpace;
+                    lastleft = left;
+                }
+                else {
+
+                    if(lastleft!=0)
+                        left = lastleft + labelwidths[i-1]+drawSpace+drawBoxSize;
+                    else
+                        left=legendBox.left+drawSpace;
+                    lastleft=left;
+
+                }
+
+                right = left+drawBoxSize;
+
+                lPaint.setColor(seriescolor.get(seriesname[i]));
 					
 					
-					ltPaint.setColor(seriescolor.get(seriesname[i]));
+                ltPaint.setColor(seriescolor.get(seriesname[i]));
 			
 		
-				if(((right + lLabelWidth)<legendBox.right))
+				if(((right + labelwidths[i])<legendBox.right))
 				{
 					
-					
-					System.out.println("A-1" + left);
-					canvas.drawRect(left,legendBox.top+drawSpace,right,
-							legendBox.top+drawSpace+drawBoxSize, lPaint);
-				
-					canvas.drawText(seriesname[i],right+drawSpace,legendBox.top+drawSpace+drawBoxSize, ltPaint);
+					System.out.println("DRAWBOXZISE"+ drawBoxSize + "DRAW"+ drawSpace+seriesname[i]);
+
 				}
 				else
 				{
 					row =row+1;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize+drawSpace;
-					
-					
-					
-					
-					
-					
-					if(bottom>legendBox.bottom)
-					{
-						
-						float rleft = legendBox.left+ (drawSpace);
-						float rright = rleft+(drawBoxSize);
-						
-						System.out.println("A" + a + rleft );
-						
-						System.out.println("LEGEND > BOTTOM" + legendBox.left);
-						redrawLegendBox(legendBox.width(),drawBoxSize,mLabelWidth);
-						
-						canvas.drawRect(rleft,top,rright,
-								bottom, lPaint);
-					
-						System.out.println(seriesname[i]);
-						canvas.drawText(seriesname[i],rright+drawSpace,
-								bottom, ltPaint);
-					}
-					else
-					{
-						
-						float rleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-						float rright = rleft+(drawBoxSize);
-						
-						System.out.println("A" + a);
-						canvas.drawRect(rleft,top,rright,
-								bottom, lPaint);
-					
-						System.out.println(seriesname[i]);
-						canvas.drawText(seriesname[i],rright+drawSpace,
-								bottom, ltPaint);
-						
-						a++;
-						
-					}
+                    lastleft=0;
+                    left = legendBox.left +drawSpace;
+                    lastleft=left;
+                    right = left+drawBoxSize;
 					
 					
 				}
+
+
+
+                top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
+                bottom = top+drawBoxSize;
+
+                if(bottom>legendBox.bottom) {
+
+                    System.out.println("BOTTOM" + bottom);
+                    redrawLegendBox(legendBox.width(),drawBoxSize,mLabelWidth);
+                }
+                    canvas.drawRect(left,top,right,
+                        bottom, lPaint);
+
+                System.out.println(seriesname[i]);
+                canvas.drawText(seriesname[i], right + drawSpace,
+                        bottom, ltPaint);
 				
 			}
 			
@@ -1341,84 +1332,7 @@ public class SpiderWeb extends ChartView{
 		}
 		
 		
-		private void drawInvalidateLegend(Canvas canvas) {
-			System.out.println("LEGEND" + legendBox);
-			 
-			//int lLabelWidth = (int) Math.abs(ltPaint.measureText("000000000"));
-			int row=1;
-			int a=0;
-			
-			
-			
-			
-			for (int i=0; i<seriesname.length; i++)
-				
-			{
-				int lLabelWidth = 0;
-				
-				if(i!=0)
-				lLabelWidth = (int) Math.abs(ltPaint.measureText(seriesname[i-1]+"0"));
-				
-				float checkleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-				float checkright = checkleft+drawBoxSize;
-				
-				
-			
-				//lPaint.setColor(seriescolor.get(i+1));
-				
 
-				
-				lPaint.setColor(seriescolor.get(seriesname[i]));
-				ltPaint.setColor(seriescolor.get(seriesname[i]));
-			
-			
-		
-				if(((checkright + lLabelWidth)<legendBox.right))
-				{
-					
-					System.out.println(seriesname[i]+"<RIGHT");
-					
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, ltPaint);
-					
-					a++;
-					
-				}
-				else
-				{
-					row =row+1;
-					System.out.println(seriesname[i]+">RIGHT");
-		     		
-					a=0;	
-					float left = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-					float right = left+drawBoxSize;
-					float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-					float bottom = top+drawBoxSize;
-						
-					System.out.println("A" + a + "ROW"+row);
-					
-					canvas.drawRect(left,top,right,
-							bottom, lPaint);
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],right+drawSpace,
-								bottom, ltPaint);
-					
-					
-					a++;
-				}
-				
-			}
-			
-			
-		}
 		 private void redrawLegendBox(float coww,int drawBoxSize,int mLabelWidth) {
 				
 			 

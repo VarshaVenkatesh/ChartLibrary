@@ -1177,81 +1177,79 @@ public void drawTextBar(Canvas canvas,Paint tPaint,Paint aPaint,
 		
 		int row=1;
 		int a=0;
-		
+        float lastleft=0;
+		int [] labelwidths = new int[numseries];
+
+
+        for (int i=0; i<labelwidths.length; i++)
+
+        {
+            labelwidths[i]= (int) Math.abs(legendPaint.measureText(seriesname[i]+"0"));
+
+        }
+
+
+
 		for (int i=0; i<numseries; i++)
 			
 		{
-			int lLabelWidth = 0;
-			
-			if(i!=0)
-			lLabelWidth = (int) Math.abs(legendPaint.measureText(seriesname[i-1]+"0"));
-			
-			float left = legendBox.left+ ((i+1)*drawSpace)+ (i*lLabelWidth) +(i*drawBoxSize);
-			float right = left+drawBoxSize;
-			
-			System.out.println("LPAINT"+ lPaint + "SERIES"+ seriesname[i]+"SERIESCOL"+seriescolor);
-		
-			lPaint.setColor(seriescolor.get(seriesname[i]));
+
+            float left=0; float right=0;
+
+            if(i==0) {
+                left = legendBox.left + drawSpace;
+                lastleft = left;
+            }
+            else {
+
+                if(lastleft!=0)
+                    left = lastleft + labelwidths[i-1]+drawSpace+drawBoxSize;
+                else
+                    left=legendBox.left+drawSpace;
+                lastleft=left;
+
+            }
+
+            right = left+drawBoxSize;
+
+            lPaint.setColor(seriescolor.get(seriesname[i]));
 			legendPaint.setColor(seriescolor.get(seriesname[i]));
 		
 	
-			if(((right + lLabelWidth)<legendBox.right))
+			if(((right + labelwidths[i])<legendBox.right))
 			{
-				
-				System.out.println("SERLEGEND" + seriesname[i] + 
-						"LR"+legendBox.right + "RIGHT" +(right + lLabelWidth)
-						);
-				
-				canvas.drawRect(left,legendBox.top+drawSpace,right,
-						legendBox.top+drawSpace+drawBoxSize, lPaint);
-			
-				
-				
-				canvas.drawText(seriesname[i],right+drawSpace
-						,legendBox.top+drawSpace+drawBoxSize, legendPaint);
+
 			}
 			else
 			{
 				row =row+1;
-				
-				System.out.println("ROW" + row);
-				
-				
-				float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
-				float bottom = top+drawBoxSize;
+                lastleft=0;
+                left = legendBox.left +drawSpace;
+                lastleft=left;
+                right = left+drawBoxSize;
 				
 				
-				float rleft = legendBox.left+ ((a+1)*drawSpace)+ (a*lLabelWidth) +(a*drawBoxSize);
-				float rright = rleft+(drawBoxSize);
-				
-				
-				
-				if(bottom>legendBox.bottom)
-				{
-					redrawLegendBox(coordbounds.width(),drawBoxSize,mLabelWidth,ticks,mAxisLabelHeight,aPaint);
-					
-					canvas.drawRect(rleft,top,rright,
-							bottom, lPaint);
-				
-					
-					canvas.drawText(seriesname[i],rright+drawSpace,
-							bottom, legendPaint);
-				}
-				else
-				{
-					
-					canvas.drawRect(rleft,top,rright,
-							bottom, lPaint);
-				
-					System.out.println(seriesname[i]);
-					canvas.drawText(seriesname[i],rright+drawSpace,
-							bottom, legendPaint);
-					
-				}
-				
-				a++;
+
 			}
-			
+
+
+            float top = legendBox.top+((row)*drawSpace)+(row-1)*drawBoxSize;
+            float bottom = top+drawBoxSize;
+
+            if(bottom>legendBox.bottom)
+            {
+                redrawLegendBox(coordbounds.width(), drawBoxSize, mLabelWidth,
+                        ticks, mAxisLabelHeight, aPaint);
+
+            }
+
+            canvas.drawRect(left,top,right,
+                    bottom, lPaint);
+
+
+            canvas.drawText(seriesname[i],right+drawSpace,
+                    bottom, legendPaint);
+
 		}
 		
 		
